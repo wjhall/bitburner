@@ -1,0 +1,1 @@
+if (hack(args[0])===0){hack(args[0])}
