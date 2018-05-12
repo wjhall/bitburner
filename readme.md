@@ -1,13 +1,12 @@
 Index of files:
-	Stocks
-		stocks.script
-		sma.script
-	Hacking
-		jfptgfmV2.script
-		daemon.script
-		hack.script
-		grow.script
-		weaken.script
+1. Stocks
+..*stocks.script
+..*sma.script
+2. Hacking
+..*main.script
+..*daemon.script
+..*hack.script..*grow.script
+..*weaken.script
 
 		
 stocks.script
