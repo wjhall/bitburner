@@ -1,11 +1,29 @@
 //init
 sym=args[0];
+
 stock=[sym,0,[],[],true,0,0]
     //0:symbol, 1:lastprice, 2:sma10,3:sma40,4:rising
     //5:sma10sum, 6:sma40sum:
+    
+myStocks=["ECP","BLD","OMTK",
+    "FSIG","FLCM","CTYS"]
+
+function getBuyValue(){
+    positions=0
+	//how many of the 6 stocks do we currently have a position open?
+    for (i=0;i<myStocks.length;i++){
+        pos = getStockPosition(myStocks[i]);
+        if ((pos[0]+pos[2])!==0){
+            positions+=1;
+        }
+    }
+	//allow opening of a position using of a proportion of available cash 
+	//depending on number of already open positions
+    BuyValue = getServerMoneyAvailable("home")/(7-positions)
+    return BuyValue
+}
 
 itter=0
-
 while(true) {
     print("looping, itter:"+itter)
     price = getStockPrice(sym);
@@ -44,16 +62,17 @@ while(true) {
         //trade if apt
         if(itter>45){
             if(new_rising && !old_rising){
-                //was falling, now rising, buy
-                value=getServerMoneyAvailable("home")/7;
-                volume=value/price
+                //was falling, now rising, close short and open long
+                sellShort(stock[0],9999999999999999999999999)
+                volume=getBuyValue()/price
                 buyStock(stock[0],volume)
             }
             if(!new_rising && old_rising){
-                //was rising, now falling, sell
-                sellStock(stock[0],999999999999999999999)
+                //was rising, now falling, close long and open short
+                sellStock(stock[0],9999999999999999999999999)
+                volume=getBuyValue()/price
+                shortStock(stock[0],volume)
             }
         }
-    //print(stock)
     }
 }
